@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+    <link rel="icon" href="../img/icons/logo.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-position:center;
+            background-image: ;
+           background-color: #1e1e1e;
+          
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            border-color: black;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            background-color: #1877F2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Registration</h2>
+        <P>PLEASE PROVIDE ALL OF THE INFORMATION BELOW WITH RELATED DOCUMENTS (REPORTS)</P>
+        <div class="user-input">
+            <input type="text" id="name" placeholder="Name" required><br>
+            <input type="number" id="age" placeholder="Age" required><br>
+            <input type="number" id="ABHA" placeholder="Your ABHA ID" required><br>
+            <input type="number" id="phone" placeholder="Phone Number" required><br>
+            <input type="text" id="disease" placeholder="Disease" required><br>
+            <textarea id="diseaseDescription" placeholder="Disease Description" required></textarea><br>
+            <input type="file" class="file"  id="fileUpload">
+            <button id="submitButton">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const submitButton = document.getElementById('submitButton');
+
+        submitButton.addEventListener('click', () => {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const phone = document.getElementById('phone').value;
+            const disease = document.getElementById('disease').value;
+            const diseaseDescription = document.getElementById('diseaseDescription').value;
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0]; 
+
+            // Basic validation (add more as needed)
+            if (name && age && phone && disease && diseaseDescription) {
+                // Handle file upload (replace with your actual server-side logic)
+                if (file) {
+                    // Create a FormData object
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('age', age);
+                    formData.append('phone', phone);
+                    formData.append('disease', disease);
+                    formData.append('diseaseDescription', diseaseDescription);
+                    formData.append('file', file);
+
+                    // Send data to server using AJAX (example with fetch)
+                    fetch('/api/register', { 
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("Registration successful!");
+                            // Clear form fields
+                            document.getElementById('name').value = '';
+                            document.getElementById('age').value = '';
+                            document.getElementById('phone').value = '';
+                            document.getElementById('disease').value = '';
+                            document.getElementById('diseaseDescription').value = '';
+                            fileInput.value = ''; 
+                        } else {
+                            alert("Registration failed.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                } else {
+                    alert("Please select a file.");
+                }
+            } else {
+                alert("Please fill in all fields.");
+            }
+        });
+    </script>
+
+</body>
+</html>
